@@ -9,7 +9,9 @@ const callbackNull = callbacks.addCallback<INullPayload>("Null");
 callbackNull.payload.boolean("isNull");
 
 callbackNull.handler = async (ctx) => {
-  return;
+  return ctx.answerCallbackQuery({
+    text: "Информация по предметам пока в разработке ;)",
+  });
 };
 
 export default callbackNull;

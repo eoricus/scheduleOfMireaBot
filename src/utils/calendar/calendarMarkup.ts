@@ -3,6 +3,7 @@ import { InlineKeyboard } from "puregram";
 import { DateMaster } from "../dateMaster";
 import changeDate from "@/listeners/callbacks/callbackChangeDate";
 import { TelegramInlineKeyboardButton } from "puregram/generated";
+import callbackNull from "@/listeners/callbacks/callbackNull";
 
 type EventList = Record<string, TelegramInlineKeyboardButton>;
 
@@ -74,7 +75,7 @@ export class CalendarMarkup<E extends VEvent> {
 
     this.events[date] = InlineKeyboard.textButton({
       text: text || "Безымянное событие",
-      payload: payload || "null",
+      payload: payload || callbackNull.payload.pack({ isNull: true }),
     });
 
     return Object.keys(this.events).length;
