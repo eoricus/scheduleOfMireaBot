@@ -1,0 +1,36 @@
+{
+  "name": "scheduleOfMireaBot",
+  "version": "1.0.0",
+  "main": "dist/bot",
+  "scripts": {
+    "start": "ts-node-dev -r tsconfig-paths/register src/index",
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-perfectionist": "^2.5.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@puregram/callback-data": "^1.2.3",
+    "@puregram/hear": "^2.1.0-rc.1",
+    "@starkow/logger": "^2.3.1",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "env-var": "^7.4.1",
+    "node-ical": "^0.17.2",
+    "puregram": "^2.20.0",
+    "rrule": "^2.8.1"
+  }
+}
