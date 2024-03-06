@@ -6,7 +6,7 @@ import callbackNull from "./callbackNull";
 import genHash from "@/utils/genHash";
 
 interface IChangeDateCallbackData {
-  date?: string;
+  date: string;
   calHash: string;
 }
 
@@ -52,41 +52,33 @@ callbackChangeDate.buttonGetter = ({ tDate, calHash }) => {
 
 // TO-DO
 callbackChangeDate.handler = async (ctx) => {
-  // console.log(ctx);
   const payload = ctx.unpackedPayload;
 
-  // console.log(payload.calHash);
-  // console.log(Object.keys(calendarManager.calendars));
-  // console.log(calendarManager.calendars);
-  if (payload?.date) {
-    const calendar = await calendarManager.getCalendarView(payload.calHash);
+  const calendar = await calendarManager.getCalendarView(payload.calHash);
 
-    if (!calendar) {
-      return;
-    }
+  if (!calendar) {
+    return;
+  }
 
-    if (ctx.inlineMessageId) {
-      return ctx.telegram.api.editMessageText({
-        inline_message_id: ctx.inlineMessageId,
-        text: `Календарь группы ${calendar.calTitle || ""} на ${new Date(
-          payload.date
-        )
-          .toLocaleString("ru")
-          .slice(0, 10)}`,
-        reply_markup: calendar.getViewFor(payload.date),
-      });
-    } else {
-      ctx.message?.editMessageText(
-        `Календарь группы ${calendar.calTitle || ""} на ${new Date(payload.date)
-          .toLocaleString("ru")
-          .slice(0, 10)}`,
-        {
-          reply_markup: calendar.getViewFor(payload.date),
-        }
-      );
-    }
+  if (ctx.inlineMessageId) {
+    return ctx.telegram.api.editMessageText({
+      inline_message_id: ctx.inlineMessageId,
+      text: `Календарь группы ${calendar.calTitle || ""} на ${new Date(
+        payload.date
+      )
+        .toLocaleString("ru")
+        .slice(0, 10)}`,
+      reply_markup: calendar.getViewFor(payload.date),
+    });
   } else {
-    // TODO
+    ctx.message?.editMessageText(
+      `Календарь группы ${calendar.calTitle || ""} на ${new Date(payload.date)
+        .toLocaleString("ru")
+        .slice(0, 10)}`,
+      {
+        reply_markup: calendar.getViewFor(payload.date),
+      }
+    );
   }
 };
 

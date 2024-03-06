@@ -31,7 +31,7 @@ export namespace Inline {
           .substring(2, 8 + 2),
         title: title,
         input_message_content: {
-          message_text: text,
+          message_text: text || title,
         } as TelegramInlineQueryResultArticle["input_message_content"],
         reply_markup: reply_markup,
       };
@@ -53,15 +53,7 @@ export namespace Inline {
     }
 
     const matchedGroups = await scheduleOfMirea.search(query);
-
-    if (matchedGroups.length == 0) {
-      return ctx.answerInlineQuery([
-        utils.getArticle(
-          `📚 Я не нашел групп/преподавателей/аудитории по запросу ${query}`
-        ),
-      ]);
-    }
-
+    console.log(query, matchedGroups.length);
     const content = [];
     for (let group of matchedGroups) {
       const groupCal = await calendarManager.setNewCalendar(
@@ -78,6 +70,19 @@ export namespace Inline {
             .slice(0, 10)}`,
           groupCal.getViewFor()
         )
+      );
+    }
+
+    if (content.length === 0) {
+      return ctx.answerInlineQuery(
+        [
+          utils.getArticle(
+            `📚 Я не нашел групп/преподавателей/аудитории по запросу ${query}`
+          ),
+        ],
+        {
+          cache_time: 10,
+        }
       );
     }
 
