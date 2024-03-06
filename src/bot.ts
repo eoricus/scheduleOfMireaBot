@@ -11,31 +11,29 @@ export default async () => {
    *
    * @param token — bot token
    */
-  const initBot = (token: string) => {
+  const initBot = async (token: string) => {
     const telegram: Telegram = Telegram.fromToken(token);
 
-    telegram.updates.stopPolling();
+    try {
+      telegram.updates.stopPolling();
 
-    telegram.updates
-      .startPolling()
-      .then(() => {
-        telegram.updates.dropPendingUpdates().then((count) => {
-          console.info(`@${telegram.bot.username} Dropped ${count} updates`);
-        });
+      await telegram.updates.startPolling();
 
-        setHints(telegram).then(() => {
-          console.info(`@${telegram.bot.username} Set hints`);
-        });
+      /**
+       * TO-DO add collecting statistics
+       */
+      await telegram.updates.dropPendingUpdates();
 
-        setListeners(telegram).then(() => {
-          console.info(`@${telegram.bot.username} Set listeners`);
-        });
+      setHints(telegram);
+      console.info(`@${telegram.bot.username} 1/3 Set hints`);
 
-        console.log(`@${telegram.bot.username} Started`);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      setListeners(telegram);
+      console.info(`@${telegram.bot.username} 2/3 Set listeners`);
+
+      console.log(`@${telegram.bot.username} 3/3 Started`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   /**
