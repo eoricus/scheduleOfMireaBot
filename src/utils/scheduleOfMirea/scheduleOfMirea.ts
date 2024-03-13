@@ -1,4 +1,5 @@
 import { VEvent } from "node-ical";
+import { fetch, setGlobalDispatcher, Agent } from "undici";
 import { CalendarView, calendarManager } from "../calendar";
 
 export interface ScheduleData {
@@ -41,9 +42,20 @@ namespace scheduleOfMirea {
     // TO-DO: fix the request assembly
     const url = base + `/search?limit=${limit}&match=${match}`;
 
-    const response = await fetch(url);
+    const controller = new AbortController();
 
-    return (await response.json()).data;
+    // 5 second timeout:
+    const response = await fetch(url, {
+      dispatcher: new Agent({ connectTimeout: 1000 }),
+    });
+
+    const scheduleData = (await response.json()) as { data: ScheduleData[] };
+
+    if (!scheduleData || !scheduleData.data) {
+      return [];
+    }
+
+    return !scheduleData || scheduleData.data ? scheduleData.data : [];
   };
 
   /**
